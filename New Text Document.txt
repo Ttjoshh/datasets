@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Counter for zero-padding
+counter=1
+
+# Loop through all jpg files that match "Chickenpox (*).jpg"
+for file in Chickenpox\ \(*\).jpg; do
+  # Extract the number from within the parentheses
+  number=$(echo "$file" | sed -e 's/Chickenpox (\([0-9]*\)).jpg/\1/')
+
+  # Check if the extracted number is valid
+  if [[ "$number" =~ ^[0-9]+$ ]]; then
+    # Zero-pad the counter to 5 digits
+    padded_number=$(printf "%05d" "$counter")
+    
+    # Form the new filename
+    new_file="Chickenpox_${padded_number}.jpg"
+    
+    # Rename the file
+    echo "Renaming $file to $new_file"
+    mv "$file" "$new_file"
+    
+    # Increment the counter
+    counter=$((counter + 1))
+  else
+    echo "Skipping file $file: no valid number found"
+  fi
+done
